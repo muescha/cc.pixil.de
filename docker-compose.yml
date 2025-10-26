@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  php:
+    build: .
+    container_name: php_app
+    volumes:
+      - .:/var/www/html        # Mount nur den src-Ordner ins Containerverzeichnis
+    working_dir: /var/www/html
+    tty: true
+    ports:
+      - "8080:80"
