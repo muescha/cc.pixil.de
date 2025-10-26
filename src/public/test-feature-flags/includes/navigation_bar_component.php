@@ -36,7 +36,7 @@
 
 <nav class="nav-bar">
     <ul>
-        <li><a href="user-control-panel.php"
+        <li><a href="/test-feature-flags/user-control-panel.php"
                class="<?php echo basename($_SERVER['PHP_SELF']) === 'user-control-panel.php' ? 'active' : ''; ?>">
             User Control
         </a></li>
