@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CC Pixil - Projekt Übersicht</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .projects {
+            display: grid;
+            gap: 20px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .project-card.featured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .project-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+
+        .project-title {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .project-description {
+            font-size: 1.1em;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .project-card.featured .project-description {
+            opacity: 0.95;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .project-card.featured .badge {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .project-title {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 CC Pixil Development</h1>
+            <p>Projekt-Übersicht & Test-Umgebungen</p>
+        </div>
+
+        <div class="projects">
+            <!-- Featured Project -->
+            <a href="/test-feature-flags/user-control-panel.php" class="project-card featured">
+                <div class="project-header">
+                    <div class="project-icon">🚀</div>
+                    <div class="project-title">Feature Flags System</div>
+                </div>
+                <div class="project-description">
+                    Test-Umgebung für Feature Flags mit User-Simulation. Ermöglicht gezieltes Testen von neuen Features für spezifische Benutzer.
+                    <br><span class="badge">🔥 Aktiv</span>
+                </div>
+            </a>
+
+            <!--
+            <a href="/test-feature-flags/beispiel.php" class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">📋</div>
+                    <div class="project-title">Beispiel-Seite</div>
+                </div>
+                <div class="project-description">
+                    Demonstriert die Feature-Flag-Funktionalität mit verschiedenen Testszenarien.
+                </div>
+            </a>
+
+            <a href="/test-feature-flags/nachrichten_cando.php" class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">💬</div>
+                    <div class="project-title">Nachrichten System</div>
+                </div>
+                <div class="project-description">
+                    Test-Implementation des Nachrichten-Systems mit BildPopup Feature-Flag Integration.
+                </div>
+            </a>
+-->
+            <a href="/test-feature-flags/check-environment.php" class="project-card">
+                <div class="project-header">
+                    <div class="project-icon">🔍</div>
+                    <div class="project-title">System Check</div>
+                </div>
+                <div class="project-description">
+                    Überprüft die Server-Umgebung auf PHP-Version, Extensions und Konfiguration.
+                </div>
+            </a>
+        </div>
+
+
+        <div class="footer">
+            <p>🛠 Docker Development Environment | PHP 8.2 + Apache</p>
+        </div>
+    </div>
+</body>
+</html>
