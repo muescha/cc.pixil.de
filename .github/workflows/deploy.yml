@@ -3,7 +3,7 @@ name: 🚀 SSH Deploy (git pull on DomainFactory)
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
