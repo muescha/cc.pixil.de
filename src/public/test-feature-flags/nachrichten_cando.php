@@ -153,7 +153,7 @@ function canUserSeeFskPics(): bool {
         $imageUrl        = "/test-feature-flags/images/{$imageFileName}";
         $thumbUrl        = "/test-feature-flags/images/{$thumbFileName}";
 
-        echo 'image path: ' . $imageUploadPath . '<br>';
+//        echo 'image path: ' . $imageUploadPath . '<br>';
         if (!file_exists($imageUploadPath)) {
             // Mock: Zeige Platzhalter, da keine echten Bilder vorhanden
             echo '<td>';
