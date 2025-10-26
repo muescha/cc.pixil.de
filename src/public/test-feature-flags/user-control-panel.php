@@ -4,7 +4,6 @@ session_start();
 // User-Liste definieren
 $users = [
     123 => 'muescha',
-    234 => 'admin',
     452 => 'maurice',
     653 => 'marc',
     456 => 'fehlermeldungUser',
