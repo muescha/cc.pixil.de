@@ -47,7 +47,7 @@ $eig_bildnamen = [
 ];
 
 // Mock: Profilbild-Pfad
-$profilbildpfad = '/var/www/html/test-feature-flags/images/';
+$profilbildpfad = __DIR__ . '/images/';
 
 // Mock: FSK-Einstellung
 if (!isset($_SESSION['nopic'])) {
