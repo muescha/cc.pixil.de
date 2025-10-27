@@ -26,5 +26,8 @@ jobs:
           ssh -t -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519 \
             -o StrictHostKeyChecking=yes \
             -o ForwardAgent=no -o ForwardX11=no \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "cd ${{ secrets.SSH_WORKDIR }} && git pull"
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+
+#           command disabled because it is in authorized_keys
+#            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+#            "cd ${{ secrets.SSH_WORKDIR }} && git pull"
