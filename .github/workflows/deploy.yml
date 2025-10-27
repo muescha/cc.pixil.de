@@ -23,7 +23,7 @@ jobs:
 
       - name: 🚀 Deploy via git pull
         run: |
-          ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519 \
+          ssh -t -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519 \
             -o StrictHostKeyChecking=yes \
             -o ForwardAgent=no -o ForwardX11=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
