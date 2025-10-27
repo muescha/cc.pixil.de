@@ -21,7 +21,7 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: 🚀 Deploy via git pull
+      - name: 🚀 Deploy via ssh and git pull
         run: |
           ssh -t -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519 \
             -o StrictHostKeyChecking=yes \
