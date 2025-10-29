@@ -1,0 +1,50 @@
+diff --git a/nachrichten.php b/nachrichten_cando.php
+index 3d1c889..6bf25d6 100644
+--- a/nachrichten.php
++++ b/nachrichten_cando.php
+@@ -56,7 +56,8 @@ if (!isset($_SESSION['nopic'])) {
+ // ===== Ende Setup Mockdata =====
+ 
+ // ===== FeatureFlag =====
+-// --- nix ---
++include_once 'includes/feature-flags.php';
++$currentUser = $_SESSION['username'];
+ // ===== FeatureFlag =====
+ 
+ function canUserSeeFskPics(): bool {
+@@ -93,7 +94,11 @@ function canUserSeeFskPics(): bool {
+     <strong>User ID:</strong> <?php echo htmlspecialchars((string)$_SESSION['id']); ?><br>
+     <strong>Feature-Status:</strong>
+     <!--    // ===== FeatureFlag =====-->
+-    <span style="color: red;">✗ Keine Feature Flag abfrage implementiert</span>
++    <?php if (canUserDo("Feature-BildPopup-Fix", $currentUser)): ?>
++        <span style="color: green; font-weight: bold;">✓ BildPopup-Fix aktiviert</span>
++    <?php else: ?>
++        <span style="color: red;">✗ Standard BildPopup</span>
++    <?php endif; ?>
+     <!--    // ===== FeatureFlag =====-->
+ </div>
+ 
+@@ -119,7 +124,9 @@ function canUserSeeFskPics(): bool {
+     echo '<tr><td colspan="3">';
+ 
+     // ===== FeatureFlag =====
+-    // --- nix ---
++    if (canUserDo("Feature-BildPopup-Fix", $currentUser)) {
++        echo '<script src="scripts/bildpopuptest.js"></script>';
++    }
+     // ===== FeatureFlag =====
+ 
+     echo '<table align="center" cellspacing="5" cellpadding="0" border="0">';
+@@ -171,7 +178,10 @@ function canUserSeeFskPics(): bool {
+         $onClickCode = "BildPopup(this.href, 'Bild', '{$breite}', '{$hoehe}'); return false;";
+ 
+         // ===== FeatureFlag =====
+-        // --- nix ---
++        if (canUserDo("Feature-BildPopup-Fix", $currentUser)) {
++            // rufe die BildPopupTest aus der /test-feature-flags/scripts/bildpopuptest.js Datei auf
++            $onClickCode = "BildPopupTest(this.href, 'Bild', '{$breite}', '{$hoehe}'); return false;";
++        }
+         // ===== FeatureFlag =====
+ 
+         echo '<td>';

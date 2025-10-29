@@ -1,0 +1,48 @@
+--- nachrichten.php	2025-10-26 22:52:45
++++ nachrichten_cando.php	2025-10-26 22:52:45
+@@ -56,7 +56,8 @@
+ // ===== Ende Setup Mockdata =====
+ 
+ // ===== FeatureFlag =====
+-// --- nix ---
++include_once 'includes/feature-flags.php';
++$currentUser = $_SESSION['username'];
+ // ===== FeatureFlag =====
+ 
+ function canUserSeeFskPics(): bool {
+@@ -93,7 +94,11 @@
+     <strong>User ID:</strong> <?php echo htmlspecialchars((string)$_SESSION['id']); ?><br>
+     <strong>Feature-Status:</strong>
+     <!--    // ===== FeatureFlag =====-->
+-    <span style="color: red;">✗ Keine Feature Flag abfrage implementiert</span>
++    <?php if (canUserDo("Feature-BildPopup-Fix", $currentUser)): ?>
++        <span style="color: green; font-weight: bold;">✓ BildPopup-Fix aktiviert</span>
++    <?php else: ?>
++        <span style="color: red;">✗ Standard BildPopup</span>
++    <?php endif; ?>
+     <!--    // ===== FeatureFlag =====-->
+ </div>
+ 
+@@ -119,7 +124,9 @@
+     echo '<tr><td colspan="3">';
+ 
+     // ===== FeatureFlag =====
+-    // --- nix ---
++    if (canUserDo("Feature-BildPopup-Fix", $currentUser)) {
++        echo '<script src="scripts/bildpopuptest.js"></script>';
++    }
+     // ===== FeatureFlag =====
+ 
+     echo '<table align="center" cellspacing="5" cellpadding="0" border="0">';
+@@ -171,7 +178,10 @@
+         $onClickCode = "BildPopup(this.href, 'Bild', '{$breite}', '{$hoehe}'); return false;";
+ 
+         // ===== FeatureFlag =====
+-        // --- nix ---
++        if (canUserDo("Feature-BildPopup-Fix", $currentUser)) {
++            // rufe die BildPopupTest aus der /test-feature-flags/scripts/bildpopuptest.js Datei auf
++            $onClickCode = "BildPopupTest(this.href, 'Bild', '{$breite}', '{$hoehe}'); return false;";
++        }
+         // ===== FeatureFlag =====
+ 
+         echo '<td>';
