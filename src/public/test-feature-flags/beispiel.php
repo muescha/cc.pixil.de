@@ -1,7 +1,7 @@
 <?php
 session_start(); // Session starten (falls noch nicht geschehen)
 
-include_once 'includes/feature-flags.php';
+include_once 'includes/feature-flags-5-4-45.php';
 
 // Beispiel: Aktuell eingeloggter Benutzer (z. B. aus Session)
 $currentUser = isset($_SESSION['username']) ? $_SESSION['username'] : 'guest';
