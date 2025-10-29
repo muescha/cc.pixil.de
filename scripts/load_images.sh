@@ -2,7 +2,7 @@
 set -e
 
 # Basisdaten
-userid="user123"
+userid="123"
 bildnamen=("mountain" "portrait" "city" "coffee" "car" "forest" "desk" "street" "beach" "cat")
 bildIDs=(1015 1021 1035 1040 1052 1062 1074 1084 109 110)
 sizes=("800/533" "500/750" "900/600" "600/600" "1000/667" "450/800" "1200/800" "600/900" "1000/562" "700/700")
