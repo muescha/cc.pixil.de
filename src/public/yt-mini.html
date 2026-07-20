@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="referrer"
+    content="strict-origin-when-cross-origin"
+  >
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="
+      default-src 'none';
+      script-src 'self';
+      style-src 'unsafe-inline';
+      frame-src https://www.youtube.com https://www.youtube-nocookie.com;
+      base-uri 'none';
+      form-action 'none';
+      object-src 'none';
+    "
+  >
+
+  <title>YouTube Mini Player</title>
+
+  <style>
+    html,
+    body,
+    iframe {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    body {
+      color: #fff;
+      font-family: system-ui, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="yt-mini.js"></script>
+</body>
+</html>
