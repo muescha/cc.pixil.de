@@ -12,6 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Diagnose SSH network
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          set -x
+      
+          echo "DNS:"
+          getent ahosts "$SSH_HOST" || true
+      
+          echo "IPv4 addresses:"
+          getent ahostsv4 "$SSH_HOST" || true
+      
+          echo "IPv6 addresses:"
+          getent ahostsv6 "$SSH_HOST" || true
+      
+          echo "TCP test via IPv4:"
+          nc -4 -vz -w 10 "$SSH_HOST" "${SSH_PORT:-22}" || true
+      
+          echo "SSH verbose test:"
+          ssh -4 -vvv \
+            -o BatchMode=yes \
+            -o ConnectTimeout=10 \
+            -p "${SSH_PORT:-22}" \
+            "$SSH_HOST" \
+            exit || true
       - name: ✅ Checkout repo
         uses: actions/checkout@v4
 
