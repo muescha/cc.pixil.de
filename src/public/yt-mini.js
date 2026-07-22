@@ -37,6 +37,7 @@ embedUrl.searchParams.set('start', String(start));
 embedUrl.searchParams.set('autoplay', '1');
 embedUrl.searchParams.set('playsinline', '1');
 embedUrl.searchParams.set('rel', '0');
+embedUrl.searchParams.set('enablejsapi', '1');
 embedUrl.searchParams.set(
   'origin',
   window.location.origin
@@ -53,3 +54,80 @@ iframe.allow =
 iframe.allowFullscreen = true;
 
 document.body.appendChild(iframe);
+
+// --- Tab-Titel: "HH:MM:SS - Titel — Kanal" via YouTube postMessage-API ---
+
+function formatDuration(totalSeconds) {
+  const s = Math.floor(totalSeconds);
+  const hh = String(Math.floor(s / 3600)).padStart(2, '0');
+  const mm = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+  const ss = String(s % 60).padStart(2, '0');
+  return `${hh}:${mm}:${ss}`;
+}
+
+let currentTitle = null;
+let currentDuration = null;
+let currentAuthor = null;
+
+function updateTabTitle() {
+  if (currentTitle === null || currentDuration === null) {
+    return;
+  }
+
+  const cleanTitle = currentTitle.replace(/\s+/g, ' ').trim();
+  let next = `${formatDuration(currentDuration)} - ${cleanTitle}`;
+
+  if (currentAuthor) {
+    next += ` — ${currentAuthor.replace(/\s+/g, ' ').trim()}`;
+  }
+
+  if (document.title !== next) {
+    document.title = next;
+  }
+}
+
+window.addEventListener('message', (event) => {
+  // Nur Nachrichten aus dem YouTube-Embed vertrauen.
+  if (
+    event.origin !== 'https://www.youtube.com' &&
+    event.origin !== 'https://www.youtube-nocookie.com'
+  ) {
+    return;
+  }
+
+  if (typeof event.data !== 'string') {
+    return;
+  }
+
+  let msg;
+  try {
+    msg = JSON.parse(event.data);
+  } catch (_) {
+    return;
+  }
+
+  const info = msg && msg.info;
+  if (!info) {
+    return;
+  }
+
+  if (info.videoData && typeof info.videoData.title === 'string') {
+    currentTitle = info.videoData.title;
+  }
+  if (info.videoData && typeof info.videoData.author === 'string') {
+    currentAuthor = info.videoData.author;
+  }
+  if (typeof info.duration === 'number' && info.duration > 0) {
+    currentDuration = info.duration;
+  }
+
+  updateTabTitle();
+});
+
+// infoDelivery-Strom starten, sobald der Player geladen ist.
+iframe.addEventListener('load', () => {
+  iframe.contentWindow.postMessage(
+    JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }),
+    '*'
+  );
+});
