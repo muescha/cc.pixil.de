@@ -3,7 +3,7 @@
 const params = new URLSearchParams(window.location.search);
 
 const videoId = params.get('v');
-const rawStart = params.get('t') ?? '0';
+const rawStart = (params.get('t') ?? '0').replace(/s$/i, '');
 
 const validVideoId =
   typeof videoId === 'string' &&
@@ -68,6 +68,7 @@ function formatDuration(totalSeconds) {
 let currentTitle = null;
 let currentDuration = null;
 let currentAuthor = null;
+let lastWrittenSecond = -1;
 
 function updateTabTitle() {
   if (currentTitle === null || currentDuration === null) {
@@ -84,6 +85,21 @@ function updateTabTitle() {
   if (document.title !== next) {
     document.title = next;
   }
+}
+
+// Aktuelle Abspielposition live als t= in die eigene URL schreiben.
+function updateUrlTime(currentTime) {
+  const secs = Math.floor(currentTime);
+
+  if (secs === lastWrittenSecond) {
+    return;
+  }
+
+  lastWrittenSecond = secs;
+
+  const url = new URL(window.location.href);
+  url.searchParams.set('t', `${secs}s`);
+  history.replaceState(null, '', url);
 }
 
 window.addEventListener('message', (event) => {
@@ -119,6 +135,9 @@ window.addEventListener('message', (event) => {
   }
   if (typeof info.duration === 'number' && info.duration > 0) {
     currentDuration = info.duration;
+  }
+  if (typeof info.currentTime === 'number' && info.currentTime > 0) {
+    updateUrlTime(info.currentTime);
   }
 
   updateTabTitle();
