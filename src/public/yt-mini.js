@@ -1,4 +1,4 @@
-'use strict';
+a'use strict';
 
 const params = new URLSearchParams(window.location.search);
 
@@ -96,6 +96,36 @@ function sendPlayerCommand(func, args = []) {
   );
 }
 
+// State einmalig für den Hammerspoon-Adapter stempeln.
+//
+// Dieser Mini-Player pausiert nach dem Autoplay-Anlauf (siehe autoPaused),
+// wodurch der infoDelivery-Strom stoppt. Der Adapter
+// (PlayerGlobalControl-ActionGenericVideo.js) hängt seinen eigenen Listener
+// aber erst beim ersten hyper+O ein -- der initiale Burst ist dann längst
+// vorbei, er hätte keinen State und die Steuerung wäre tot. Wir schreiben den
+// State deshalb hier einmal im Adapter-Format nach
+// document.documentElement.dataset.pgcYtState (gleiches Top-Dokument). Sobald
+// der Adapter danach playVideo schickt, fließt infoDelivery wieder und sein
+// eigener Listener übernimmt und hält den State fortan aktuell.
+function seedPgcState(info) {
+  const state = { playerState: 2, at: Date.now() };
+
+  state.currentTime =
+    typeof info.currentTime === 'number' ? info.currentTime : start;
+
+  if (typeof currentDuration === 'number') {
+    state.duration = currentDuration;
+  }
+  if (typeof info.playbackRate === 'number') {
+    state.playbackRate = info.playbackRate;
+  }
+  if (Array.isArray(info.availablePlaybackRates)) {
+    state.rates = info.availablePlaybackRates;
+  }
+
+  document.documentElement.dataset.pgcYtState = JSON.stringify(state);
+}
+
 window.addEventListener('message', (event) => {
   // Nur Nachrichten aus dem YouTube-Embed vertrauen.
   if (
@@ -137,6 +167,9 @@ window.addEventListener('message', (event) => {
   if (!autoPaused && info.playerState === 1) {
     autoPaused = true;
     sendPlayerCommand('pauseVideo');
+    // Adapter-State seeden, bevor der infoDelivery-Strom durch die Pause
+    // versiegt. playerState: 2 (pausiert) passt zum tatsächlichen Zustand.
+    seedPgcState(info);
   }
 
   updateTabTitle();
