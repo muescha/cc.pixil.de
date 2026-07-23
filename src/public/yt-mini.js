@@ -1,4 +1,4 @@
-a'use strict';
+'use strict';
 
 const params = new URLSearchParams(window.location.search);
 
