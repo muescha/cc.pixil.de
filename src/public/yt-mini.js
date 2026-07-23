@@ -68,7 +68,7 @@ function formatDuration(totalSeconds) {
 let currentTitle = null;
 let currentDuration = null;
 let currentAuthor = null;
-let lastWrittenSecond = -1;
+let autoPaused = false;
 
 function updateTabTitle() {
   if (currentTitle === null || currentDuration === null) {
@@ -81,25 +81,19 @@ function updateTabTitle() {
   if (currentAuthor) {
     next += ` — ${currentAuthor.replace(/\s+/g, ' ').trim()}`;
   }
+  next += " - YouTube";
 
   if (document.title !== next) {
     document.title = next;
   }
 }
 
-// Aktuelle Abspielposition live als t= in die eigene URL schreiben.
-function updateUrlTime(currentTime) {
-  const secs = Math.floor(currentTime);
-
-  if (secs === lastWrittenSecond) {
-    return;
-  }
-
-  lastWrittenSecond = secs;
-
-  const url = new URL(window.location.href);
-  url.searchParams.set('t', `${secs}s`);
-  history.replaceState(null, '', url);
+// Player-Kommando an das YouTube-IFrame senden.
+function sendPlayerCommand(func, args = []) {
+  iframe.contentWindow.postMessage(
+    JSON.stringify({ event: 'command', func: func, args: args }),
+    '*'
+  );
 }
 
 window.addEventListener('message', (event) => {
@@ -136,8 +130,13 @@ window.addEventListener('message', (event) => {
   if (typeof info.duration === 'number' && info.duration > 0) {
     currentDuration = info.duration;
   }
-  if (typeof info.currentTime === 'number' && info.currentTime > 0) {
-    updateUrlTime(info.currentTime);
+
+  // Nur laden, nicht abspielen: sobald der Player das erste Mal läuft,
+  // genau einmal pausieren. So bleibt er am Startpunkt stehen (mit Live-Frame
+  // statt Big-Play-Button), spielt aber nicht von selbst weiter.
+  if (!autoPaused && info.playerState === 1) {
+    autoPaused = true;
+    sendPlayerCommand('pauseVideo');
   }
 
   updateTabTitle();
